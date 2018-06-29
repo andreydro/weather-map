@@ -1,0 +1,5 @@
+Погода:
+Роутер: about, author, coordinates(), search(/city=(minsk)
+Компоненты: 3
+Сервисы: адрес -> координаты (async), запрос погоды(async), request (xhr, fetch), хранилище(async), eventBus
+Компонеты маленькие: история(eventbus, storage), favorites(eventBus, storage), Weather(evenyBus, service for weather), map(eventBus, changes coords, add to favorites), Menu-xhr,fetch (eventBus), Search()
