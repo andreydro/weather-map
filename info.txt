@@ -2,16 +2,16 @@
 Роутер: about, author, coordinates(), search(/city=(minsk)
 Компоненты: 3
 Сервисы: адрес -> координаты (async), запрос погоды(async), request (xhr, fetch), хранилище(async), eventBus
-Компонеты маленькие: история(eventbus, storage), favorites(eventBus, storage), Weather(evenyBus, service for weather), map(eventBus, changes coords, add to favorites), Menu-xhr,fetch (eventBus), Search()
+Компонеты маленькие: история(eventBus, storage), favorites(eventBus, storage), Weather(eventBus, service for weather), map(eventBus, changes coords, add to favorites), Menu-xhr,fetch (eventBus), Search()
 
 Задачи:
-1) Добавить и настроить gulp в проект
++ 1) Добавить и настроить gulp в проект
 + 2) Создать файлы index.html, script.js, styles.css
 + 3) Добавить шаблон в файл index.html с 3я страницами(About, Main, Author)
 + 4) На странице Author добавить информацию о авторе
 + 5) На странице About добавить информацию о сайте, инфо откуда был открыт сайт (API https://api.userinfo.io/userinfos)
 + 6) На странице Main добавить яндекс карту, форму поиска, 2 радиобатона(fetch, XHR), под картой 3 бокса(history, weather, favorites)
-7) Добавить роутер для работы 3х страниц
+7) Добавить роутер для работы 3х страниц?
 8) Добавить отображение погоды в бокс weather. Он показывает погоду, которая соответствует координатам карты. API https://darksky.net/
 9) Настроить поиск города. 2я смособами, с помощью fetch и XHR. Когда пользователь наживаем кнопку search, карта перемещается на координаты этого города, бокс погоды показывает погоду в этом городе, в бокс история сохраняется поисковой запрос. API coordinates
 10) Добавить функционал favorites. При нажатии на звездочку, в бокс favorites сохраряется интересующий город, который сейчас находится на карте

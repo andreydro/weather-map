@@ -21,7 +21,6 @@ function displayAbout() {
 			console.log(xhr.status + ": " + xhr.statusText);
 		} else {
 			response = JSON.parse(xhr.responseText);
-			console.log(response);
 			var country = response.country.name;
 			var city = response.city.name;
 			var ip_address = response.ip_address;
@@ -49,9 +48,9 @@ function displayAuthor() {
 },{}],3:[function(require,module,exports){
 "use strict";
 
-var _author = require('./author');
+var _author = require("./author");
 
-var _about = require('./about');
+var _about = require("./about");
 
 window.onhashchange = function () {
 	displayPage(window.location.hash || "#main");
@@ -73,20 +72,73 @@ function displayMap() {
 	var content = document.getElementById("content");
 	content.innerHTML = "";
 
+	ymaps.ready(init);
+
+	function init() {
+		var myMap;
+		myMap = new ymaps.Map("map", {
+			center: [53.9, 27.5667],
+			zoom: 9
+		});
+		console.log(myMap.geoObjects._map._globalPixelCenter);
+	}
+
 	var mainPage = document.getElementById("main");
 	content.innerHTML = mainPage.innerHTML;
 }
 
-ymaps.ready(init);
+function callWeatherApi() {
+	var response;
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "https://api.darksky.net/forecast/6243939e87a008b4c9ce2f3c02fdd256/53.9,27.5667", true);
+	xhr.send();
 
-function init() {
-	var myMap;
-	myMap = new ymaps.Map("map", {
-		center: [53.9, 27.5667],
-		zoom: 9
-	}, {
-		searchControlProvider: "yandex#search"
-	});
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState != 4) return;
+
+		if (xhr.status != 200) {
+			console.log(xhr.status + ": " + xhr.statusText);
+		} else {
+			response = JSON.parse(xhr.responseText);
+			console.log(response);
+		}
+	};
 }
+
+function EventBus() {
+	this.handlers = {};
+}
+EventBus.prototype = {
+	on: function on(eventName, callback) {
+		this.handlers[eventName] = this.handlers[eventName] || [];
+		this.handlers[eventName].push(callback);
+	},
+	off: function off(eventName) {
+		var _this = this;
+
+		var data = [].slice.call(arguments, 1);
+		data.forEach(function (mainElement) {
+			_this.handlers[eventName] = _this.handlers[eventName].filter(function (elem) {
+				return elem != mainElement;
+			});
+		});
+	},
+
+	trigger: function trigger(eventName) {
+		var data = [].slice.call(arguments, 1);
+		if (this.handlers[eventName]) {
+			this.handlers[eventName].forEach(function (element) {
+				return element.apply(null, data);
+			});
+		}
+	},
+	once: function once(eventName, callback) {
+		var self = this;
+		self.on(eventName, function temp() {
+			callback.apply(self, arguments);
+			self.off(eventName, temp);
+		});
+	}
+};
 
 },{"./about":1,"./author":2}]},{},[3]);
