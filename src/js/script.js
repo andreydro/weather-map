@@ -1,4 +1,6 @@
 "use strict";
+import {displayAuthor} from './author';
+import {displayAbout} from './about';
 
 window.onhashchange = function() {
 	displayPage(window.location.hash || "#main");

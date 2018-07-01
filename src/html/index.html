@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Weather</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header id="page">
+            <ul id="links">
+                <li>
+                    <a href="#about">About</a>
+                </li>
+                <li>
+                    <a href="#main">Main</a>
+                </li>
+                <li>
+                    <a href="#author">Author</a>
+                </li>
+            </ul>
+        </header>
+        <div id="content"></div>
+        <div id="main" class="hidden">
+        	<div id="radio-buttons">
+        		<input type="radio" id="radio-button-xhr" name="XHR">
+        		<label for="radio-button-xhr">XHR</label>
+        		<input type="radio" id="radio-button-fetch" name="fetch">
+        		<label for="radio-button-fetch">fetch</label>
+        	</div>
+        	<div id="search-box">
+        	  <input type="search" id="search-input">
+        	  <button>Search</button>
+          </div>
+          <div id="yandex-map">
+            <div id="map" style="width: 100%; height: 100%"></div>
+          </div>
+          <div id="boxes">
+	          <div id="history">
+	          	history
+	          </div>
+	          <div id="weather">
+	          	weather
+	          </div>
+	          <div id="favorites">
+	          	favorites
+	          </div>
+	        </div>
+        </div>
+        <div id="about" class="hidden"></div>
+        <div id="author" class="hidden">
+          <h1>
+            Author <br>
+            Andrey Drozdov <br>
+            andreydro14@gmail.com <br>
+            <a href="https://github.com/andreydro">https://github.com/andreydro</a>
+          </h1>
+        </div>
+    </div>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
+    <script src="bundle.js"></script>
+</body>
+
+</html>
