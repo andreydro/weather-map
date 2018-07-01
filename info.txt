@@ -3,3 +3,14 @@
 Компоненты: 3
 Сервисы: адрес -> координаты (async), запрос погоды(async), request (xhr, fetch), хранилище(async), eventBus
 Компонеты маленькие: история(eventbus, storage), favorites(eventBus, storage), Weather(evenyBus, service for weather), map(eventBus, changes coords, add to favorites), Menu-xhr,fetch (eventBus), Search()
+
+Задачи:
+1) Создать файлы index.html, script.js, styles.css
+2) Добавить шаблон в файл index.html с 3я страницами(About, Main, Author)
+3) На странице Author добавить информацию о авторе
+4) На странице About добавить информацию о сайте, инфо откуда был открыт сайт (API https://api.userinfo.io/userinfos)
+5) На странице Main добавить яндекс карту, форму поиска, 2 радиобатона(fetch, XHR), под картой 3 бокса(history, weather, favorites)
+6) Добавить роутер для работы 3х страниц
+7) Добавить отображение погоды в бокс weather. Он показывает погоду, которая соответствует координатам карты. API https://darksky.net/
+8) Настроить поиск города. 2я смособами, с помощью fetch и XHR. Когда пользователь наживаем кнопку search, карта перемещается на координаты этого города, бокс погоды показывает погоду в этом городе, в бокс история сохраняется поисковой запрос. API coordinates
+9) Добавить функционал favorites. При нажатии на звездочку, в бокс favorites сохраряется интересующий город, который сейчас находится на карте

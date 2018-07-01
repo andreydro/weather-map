@@ -24,19 +24,7 @@ function displayMap() {
 	content.innerHTML = mainPage.innerHTML;
 }
 
-function displayAuthor() {
-	var content = document.getElementById("content");
-	var author = document.getElementById("author");
-	content.innerHTML = author.innerHTML;
-}
 
-function displayAbout() {
-	var content = document.getElementById("content");
-	content.innerHTML = "";
-
-	var about = document.getElementById("about");
-	content.innerHTML = about.innerHTML;
-}
 
 ymaps.ready(init);
 
