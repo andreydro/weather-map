@@ -40,25 +40,28 @@ function displayMap() {
 	content.innerHTML = mainPage.innerHTML;
 }
 
-function callWeatherApi() {
-	var response;
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "https://api.darksky.net/forecast/6243939e87a008b4c9ce2f3c02fdd256/53.9,27.5667", true);
-	xhr.send();
+function callWeatherWithJsonp(url, callback) {
+    var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    window[callbackName] = function(data) {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        callback(data);
+    };
 
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState != 4) return;
-
-		if (xhr.status != 200) {
-			console.log(xhr.status + ": " + xhr.statusText);
-		} else {
-			response = JSON.parse(xhr.responseText);
-			console.log(response);
-		}
-	};
+    var script = document.createElement('script');
+    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+    document.body.appendChild(script);
 }
 
-function callWeatherApi();
+callWeatherWithJsonp('https://api.darksky.net/forecast/6243939e87a008b4c9ce2f3c02fdd256/53.9,27.5667', function(data) {
+	var weather = document.getElementById("weather");
+  var summary = data.currently.summary;
+  var timezone = data.timezone;
+  var temperatureCelsius = Math.round((data.currently.temperature - 32)/1.8);
+  var windSpeed = data.currently.windSpeed;
+  var text = "<p>" + "In " + timezone + " currently is " + summary + ", " + "</p>" + temperatureCelsius + " degress, <p> wind speed: " + windSpeed + " mph</p>"; 
+  weather.innerHTML = text;
+});
 
 function EventBus() {
     this.handlers = {};
