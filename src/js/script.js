@@ -18,28 +18,6 @@ function displayPage(hash) {
 	}
 }
 
-function displayMap() {
-	var content = document.getElementById("content");
-	content.innerHTML = "";
-
-	ymaps.ready(init);
-
-	function init() {
-		var myMap;
-		myMap = new ymaps.Map(
-			"map",
-			{
-				center: [53.9, 27.5667],
-				zoom: 9
-			}
-		);
-		console.log(myMap.geoObjects._map._globalPixelCenter);
-	}
-
-	var mainPage = document.getElementById("main");
-	content.innerHTML = mainPage.innerHTML;
-}
-
 function callWeatherWithJsonp(url, callback) {
     var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
     window[callbackName] = function(data) {
@@ -53,15 +31,43 @@ function callWeatherWithJsonp(url, callback) {
     document.body.appendChild(script);
 }
 
-callWeatherWithJsonp('https://api.darksky.net/forecast/6243939e87a008b4c9ce2f3c02fdd256/53.9,27.5667', function(data) {
-	var weather = document.getElementById("weather");
-  var summary = data.currently.summary;
-  var timezone = data.timezone;
-  var temperatureCelsius = Math.round((data.currently.temperature - 32)/1.8);
-  var windSpeed = data.currently.windSpeed;
-  var text = "<p>" + "In " + timezone + " currently is " + summary + ", " + "</p>" + temperatureCelsius + " degress, <p> wind speed: " + windSpeed + " mph</p>"; 
-  weather.innerHTML = text;
-});
+
+function displayMap() {
+	var content = document.getElementById("content");
+	var map = document.getElementById("map");	
+	content.innerHTML = "";
+
+	ymaps.ready(init);
+
+	function init() {
+		var myMap;
+		myMap = new ymaps.Map(
+			"map",
+			{
+				center: [53.9, 27.5667],
+				zoom: 10
+			}
+		);
+
+		myMap.events.add('actionend', function(){
+			var latitude = myMap.getCenter()[0];
+			var longitude = myMap.getCenter()[1];
+			callWeatherWithJsonp(`https://api.darksky.net/forecast/6243939e87a008b4c9ce2f3c02fdd256/${latitude},${longitude}`, function(data) {
+			  var weather = document.getElementById("weather");
+		    var summary = data.currently.summary;
+		    var timezone = data.timezone;
+		    var temperatureCelsius = Math.round((data.currently.temperature - 32)/1.8);
+		    var windSpeed = data.currently.windSpeed;
+		    var text = "<p>" + "In " + timezone + " currently is " + summary + ", " + "</p>" + temperatureCelsius + " degress, <p> wind speed: " + windSpeed + " mph</p>"; 
+		    weather.innerHTML = text;
+      });
+		})
+		
+	}
+
+	var mainPage = document.getElementById("main");
+	content.innerHTML = mainPage.innerHTML;
+}
 
 function EventBus() {
     this.handlers = {};
@@ -95,3 +101,4 @@ EventBus.prototype = {
         });
     }
 };
+
