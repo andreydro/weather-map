@@ -14,6 +14,7 @@ export function displayAbout() {
 			console.log(xhr.status + ": " + xhr.statusText);
 		} else {
 			response = JSON.parse(xhr.responseText);
+			console.log(response);
 			var country = response.country.name;
 			var city = response.city.name;
 			var ip_address = response.ip_address;

@@ -2,21 +2,116 @@
 import { displayAuthor } from "./author";
 import { displayAbout } from "./about";
 
-window.onhashchange = function() {
-	displayPage(window.location.hash || "#main");
-};
+// Router
 
-displayPage(window.location.hash || "#main");
-
-function displayPage(hash) {
-	if (hash == "#main") {
-		displayMap();
-	} else if (hash == "#about") {
-		displayAbout();
-	} else if (hash == "#author") {
-		displayAuthor();
-	}
+function HashRouter(options) {
+  options = options || {};
+  this.routes = options.routes || [];
+  this.handleUrl(getHash());
+  window.addEventListener('hashchange', function() {
+    this.handleUrl(getHash());
+  }.bind(this));
 }
+
+HashRouter.prototype = {
+  handleUrl: function(url) {
+    var routes = this.routes || [];
+    var result = findRoute(routes, url);
+    var route = result[0];
+    var params = result[1];
+    if(!route) { return; }
+    
+    Promise.resolve()
+      .then(()=> {
+        if(this.prevRoute && this.prevRoute.onLeave) {
+          return this.prevRoute.onLeave.call(this.prevRoute, this.prevParams);
+        }
+      })
+      .then(() => {
+        if(route.onBeforeEnter) {
+         return route.onBeforeEnter.call(route, params);
+        }
+      })
+      .then(() => {
+        this.prevRoute = route;
+        this.prevParams = params;
+        if(route.onEnter) {
+          return route.onEnter.call(route, params); 
+        }
+      });
+  },
+}
+function getHash() {
+  return decodeURI(window.location.hash).slice(1);
+}
+function findRoute(routeList, url) {
+  var result = [null, null];
+  routeList.forEach(function(route) {
+    if(result[0]) { return; }
+    if(route.match === url) {
+       result = [route, url];
+    } else if(route.match instanceof RegExp && route.match.test(url)) {
+       result = [route, url.match(route.match)];
+    } else if(typeof route.match === 'function' && route.match.call(this, url)) {
+       result = [route, route.match.call(this, url)];      
+    }
+  });
+  return result;
+}
+
+var router = new HashRouter({
+  routes: [{
+    name: 'main',
+    match: (text) => text === 'main',
+    onBeforeEnter: () => console.log('onBeforeEnter main'),
+    onEnter: () => { console.log('onEnter main');
+                     displayMap();
+  },
+    onLeave: () => { console.log('onLeave main');
+                     content.innerHTML = "";
+                   }
+  },{
+    name: 'author',
+    match: (text) => text === 'author',
+    onBeforeEnter: () => console.log('onBeforeEnter author'),
+    onEnter: () => {console.log('onEnter author');
+                    displayAuthor();
+    },
+    onLeave: () => {console.log('onLeave author');
+                    content.innerHTML = "";
+    }
+  }, {
+    name: 'coordinates',
+    match: /coordinates=(.+)/,
+    onBeforeEnter: (cooordinates) => {
+      showYandexMap();
+    },
+    onEnter: (city) => console.log(`onEnter city:${city}`),
+    onLeave: (city) => console.log(`onLeave city:${city}`)
+  },  {
+    name: 'city',
+    match: /city=(.+)/,
+    onBeforeEnter: (city) => {
+      getCityCoordinate(city).then((ll) => window.local.hash='coordinates=' + ll); 
+    },
+    onEnter: (city) => console.log(`onEnter city:${city}`),
+    onLeave: (city) => console.log(`onLeave city:${city}`)
+  },{
+    name: 'about',
+    match: (text) => text === 'about',
+    onBeforeEnter: () => console.log(`onBeforeEnter about`),
+    onEnter: () => {
+      console.log(`onEnter about`);
+      displayAbout();
+    },
+    onLeave: () => {
+      console.log(`onLeave about`);
+      content.innerHTML = "";
+    }
+  }]
+});
+
+// Track weather forecast following coordinates
 
 function callWeatherWithJsonp(url, callback) {
     var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
@@ -31,6 +126,7 @@ function callWeatherWithJsonp(url, callback) {
     document.body.appendChild(script);
 }
 
+// Yandex Map
 
 function displayMap() {
 	var content = document.getElementById("content");
@@ -52,6 +148,7 @@ function displayMap() {
 		myMap.events.add('actionend', function(){
 			var latitude = myMap.getCenter()[0];
 			var longitude = myMap.getCenter()[1];
+
 			callWeatherWithJsonp(`https://api.darksky.net/forecast/6243939e87a008b4c9ce2f3c02fdd256/${latitude},${longitude}`, function(data) {
 			  var weather = document.getElementById("weather");
 		    var summary = data.currently.summary;
@@ -68,6 +165,8 @@ function displayMap() {
 	var mainPage = document.getElementById("main");
 	content.innerHTML = mainPage.innerHTML;
 }
+
+// Event Bus
 
 function EventBus() {
     this.handlers = {};
