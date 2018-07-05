@@ -16,7 +16,7 @@
                     <a href="#about">About</a>
                 </li>
                 <li>
-                    <a href="#main">Main</a>
+                    <a href="#coordinates">Main</a>
                 </li>
                 <li>
                     <a href="#author">Author</a>
@@ -26,15 +26,15 @@
         <div id="content"></div>
         <div id="main" class="hidden">
         	<div id="radio-buttons">
-        		<input type="radio" id="radio-button-xhr" name="XHR">
+        		<input type="radio" id="radio-button-xhr" name="request" checked>
         		<label for="radio-button-xhr">XHR</label>
-        		<input type="radio" id="radio-button-fetch" name="fetch">
+        		<input type="radio" id="radio-button-fetch" name="request">
         		<label for="radio-button-fetch">fetch</label>
         	</div>
-        	<div id="search-box">
-        	  <input type="search" id="search-input">
+        	<form class="search-box">
+        	  <input type="text" id="search-input">
         	  <button>Search</button>
-          </div>
+            </form>
           <div id="yandex-map">
             <div id="map" style="width: 100%; height: 100%"></div>
           </div>

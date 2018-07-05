@@ -115,48 +115,18 @@ function findRoute(routeList, url) {
 
 var router = new HashRouter({
   routes: [{
-    name: 'main',
-    match: function match(text) {
-      return text === 'main';
-    },
+    name: 'coordinates',
+    match: /coordinates/,
     onBeforeEnter: function onBeforeEnter() {
-      return console.log('onBeforeEnter main');
+      return console.log('onBeforeEnter coordinates');
     },
     onEnter: function onEnter() {
-      console.log('onEnter main');
+      console.log("onEnter coordinates");
       displayMap();
     },
     onLeave: function onLeave() {
-      console.log('onLeave main');
+      console.log('onLeave coordinates');
       content.innerHTML = "";
-    }
-  }, {
-    name: 'author',
-    match: function match(text) {
-      return text === 'author';
-    },
-    onBeforeEnter: function onBeforeEnter() {
-      return console.log('onBeforeEnter author');
-    },
-    onEnter: function onEnter() {
-      console.log('onEnter author');
-      (0, _author.displayAuthor)();
-    },
-    onLeave: function onLeave() {
-      console.log('onLeave author');
-      content.innerHTML = "";
-    }
-  }, {
-    name: 'coordinates',
-    match: /coordinates=(.+)/,
-    onBeforeEnter: function onBeforeEnter(cooordinates) {
-      showYandexMap();
-    },
-    onEnter: function onEnter(city) {
-      return console.log("onEnter city:" + city);
-    },
-    onLeave: function onLeave(city) {
-      return console.log("onLeave city:" + city);
     }
   }, {
     name: 'city',
@@ -186,6 +156,22 @@ var router = new HashRouter({
     },
     onLeave: function onLeave() {
       console.log("onLeave about");
+      content.innerHTML = "";
+    }
+  }, {
+    name: 'author',
+    match: function match(text) {
+      return text === 'author';
+    },
+    onBeforeEnter: function onBeforeEnter() {
+      return console.log('onBeforeEnter author');
+    },
+    onEnter: function onEnter() {
+      console.log('onEnter author');
+      (0, _author.displayAuthor)();
+    },
+    onLeave: function onLeave() {
+      console.log('onLeave author');
       content.innerHTML = "";
     }
   }]
@@ -240,6 +226,16 @@ function displayMap() {
 
   var mainPage = document.getElementById("main");
   content.innerHTML = mainPage.innerHTML;
+
+  // Search weather by coordinates
+
+  var searchInput = document.getElementById("search-input");
+  var searchBox = document.querySelector("form.search-box");
+
+  searchBox.addEventListener("submit", function (el) {
+    el.preventDefault();
+    console.log(searchInput.value);
+  });
 }
 
 // Event Bus

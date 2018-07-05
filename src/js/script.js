@@ -61,34 +61,16 @@ function findRoute(routeList, url) {
 
 var router = new HashRouter({
   routes: [{
-    name: 'main',
-    match: (text) => text === 'main',
-    onBeforeEnter: () => console.log('onBeforeEnter main'),
-    onEnter: () => { console.log('onEnter main');
-                     displayMap();
-  },
-    onLeave: () => { console.log('onLeave main');
+    name: 'coordinates',
+    match: /coordinates/,
+    onBeforeEnter: () => console.log('onBeforeEnter coordinates'),
+    onEnter: () => {console.log(`onEnter coordinates`)
+    	              displayMap();
+    },
+    onLeave: () => { console.log('onLeave coordinates');
                      content.innerHTML = "";
                    }
   },{
-    name: 'author',
-    match: (text) => text === 'author',
-    onBeforeEnter: () => console.log('onBeforeEnter author'),
-    onEnter: () => {console.log('onEnter author');
-                    displayAuthor();
-    },
-    onLeave: () => {console.log('onLeave author');
-                    content.innerHTML = "";
-    }
-  }, {
-    name: 'coordinates',
-    match: /coordinates=(.+)/,
-    onBeforeEnter: (cooordinates) => {
-      showYandexMap();
-    },
-    onEnter: (city) => console.log(`onEnter city:${city}`),
-    onLeave: (city) => console.log(`onLeave city:${city}`)
-  },  {
     name: 'city',
     match: /city=(.+)/,
     onBeforeEnter: (city) => {
@@ -107,6 +89,16 @@ var router = new HashRouter({
     onLeave: () => {
       console.log(`onLeave about`);
       content.innerHTML = "";
+    }
+  },{
+    name: 'author',
+    match: (text) => text === 'author',
+    onBeforeEnter: () => console.log('onBeforeEnter author'),
+    onEnter: () => {console.log('onEnter author');
+                    displayAuthor();
+    },
+    onLeave: () => {console.log('onLeave author');
+                    content.innerHTML = "";
     }
   }]
 });
@@ -164,6 +156,16 @@ function displayMap() {
 
 	var mainPage = document.getElementById("main");
 	content.innerHTML = mainPage.innerHTML;
+
+  // Search weather by coordinates
+  
+	var searchInput = document.getElementById("search-input");
+  var searchBox = document.querySelector("form.search-box");
+
+  searchBox.addEventListener("submit", function(el){
+	  el.preventDefault();
+	  console.log(searchInput.value);
+  });
 }
 
 // Event Bus
